@@ -4,13 +4,14 @@ import glob
 import base64
 import pathlib
 from werkzeug.utils import secure_filename
-from xplayer import XPlayer
-import vlc
+# from xplayer import XPlayer
+from vlcplayer import VlcPlayer
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
-player = XPlayer.get_player(app.config['PLAYER_PLUGIN'])
+# player = XPlayer.Instance().get_player(app.config['PLAYER_PLUGIN'])
+player = VlcPlayer.Instance()
 
 # Try creating media folder if it doesn't exist
 try:
@@ -55,11 +56,12 @@ def upload_media_file():
 @app.route('/watch/<string:base64url_encoded_name>', methods=['GET'])
 def watch_media(base64url_encoded_name):
     filename = base64.urlsafe_b64decode(base64url_encoded_name).decode("utf-8")
-    player.add_file(path.join(app.config['MEDIA_FOLDER'], filename))
+    player.set_media(path.join(app.config['MEDIA_FOLDER'], filename))
     return render_template('watch.html', filename = filename)
 
 @app.route('/player/<string:action>', methods=['POST'])
 def player_action(action):
+    print("Id of player : {}".format(str(id(player))))
     if(action == 'play'):
         player.play()
     elif(action == 'pause'):
