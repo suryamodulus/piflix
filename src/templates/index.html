@@ -58,8 +58,8 @@
                       {{ file.name }}
                     </p>
                   </div>
-                  <div class="col-12 col-md-2">
-                    <a href="/watch/{{ file.base64url_encoded_name }}" class="btn btn-sm btn-primary" rel="noreferrer">
+                  <div class="col-12 col-md-2 text-center">
+                    <a href="/watch/{{ file.base64url_encoded_name }}" class="btn btn-sm btn-primary mx-1" rel="noreferrer">
                         <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -67,7 +67,7 @@
                         </svg>
                         Watch
                     </a>
-                    <a href="#" class="btn btn-sm btn-outline-red" data-bs-toggle="modal" data-bs-target="#delete-media-file-modal" data-media-name="{{ file.name }}" data-media-base64url-encoded-name="{{ file.base64url_encoded_name }}">
+                    <a href="#" class="btn btn-sm btn-outline-red mx-1" data-bs-toggle="modal" data-bs-target="#delete-media-file-modal" data-media-name="{{ file.name }}" data-media-base64url-encoded-name="{{ file.base64url_encoded_name }}">
                       <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
