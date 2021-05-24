@@ -7,8 +7,9 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <link href="{{ url_for('static', filename='css/tabler.min.css') }}" rel="stylesheet">
         <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/x-icon">
+        <link href="{{ url_for('static', filename='css/tabler.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
     </head>
 <body>
     <header class="navbar navbar-light d-print-none">
@@ -37,41 +38,71 @@
         </div>
       </header>
       <main class="container py-4">
-      <div class="card">
-        <div class="card-body text-center">
-          <h2>{{ filename }}</h2>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="row justify-content-around">
-            <div class="col">
-              <button class="btn btn-outline-primary" onclick="playerController('rewind10')">Rewind 10s</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-outline-primary" onclick="playerController('play_pause')">Play</button>
-            </div>
-            <div class="col">
-              <button class="btn btn-outline-primary" onclick="playerController('forward10')">Forward 10s</button>
+        <section class="watch-box">
+          <div class="card mx-auto">
+            <div class="card-body text-center">
+              <h2>{{ filename }}</h2>
             </div>
           </div>
-        </div>
-      </div>
+          <div class="card mx-auto my-4 bg-dark">
+            <div class="card-body text-center">
+              <div class="row justify-content-around">
+                <div class="col-3">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('rewind10')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <polyline points="11 7 6 12 11 17"></polyline>
+                      <polyline points="17 7 12 12 17 17"></polyline>
+                    </svg>
+                  </button>
+                  <div>
+                    <span class="text-white">- 10s</span>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('play_pause')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M7 4v16l13 -8z"></path>
+                    </svg>
+                  </button>
+                  <div>
+                    <span class="text-white">Play</span>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('forward10')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <polyline points="7 7 12 12 7 17"></polyline>
+                      <polyline points="13 7 18 12 13 17"></polyline>
+                    </svg>
+                  </button>
+                  <div>
+                    <span class="text-white">+ 10s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <script src="{{ url_for('static', filename='js/tabler.min.js') }}"></script>
       <script>
+        const play_text = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M7 4v16l13 -8z"></path>
+          </svg> Play`
         let playState = 'pause';
         async function playerController(action){
           let el = event.target || event.srcElement;
           if(action === 'play_pause' && playState === 'pause'){
             action = 'play'
             playState = 'play'
-            el.text = 'Play'
           }
           else if(action === 'play_pause' && playState === 'play'){
             action = 'pause'
             playState = 'pause'
-            el.text = 'Play'
           }
           await fetch(`/player/${action}`, { method: 'POST'})
         }
