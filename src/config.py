@@ -1,4 +1,4 @@
 FLASK_ENV = 'production'
-MEDIA_FOLDER = '/Users/apple/Movies/video-songs'
+PLAYER_PLUGIN = 'vlc' # omx or vlc
 ALLOWED_MEDIA_EXTENSIONS = ['.mp4']
-PLAYER_PLUGIN = 'vlc'
+MEDIA_FOLDER_PATH = '/Users/apple/Movies/video-songs'
