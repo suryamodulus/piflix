@@ -50,18 +50,26 @@ def upload_media_file():
 def watch_media(base64url_encoded_name):
     filename = base64.urlsafe_b64decode(base64url_encoded_name).decode("utf-8")
     player.set_media(path.join(app.config['MEDIA_FOLDER_PATH'], filename))
-    return render_template('watch.html', filename = filename)
+    stats = player.get_stats()
+    return render_template('watch.html', filename = filename, stats = stats)
 
-@app.route('/player/<string:action>', methods=['POST'])
-def player_action(action):
+@app.route('/player/stats', methods=['GET'])
+def player_stats():
+    data = player.get_stats()
+    return jsonify(data=data)
+
+@app.route('/player/controller', methods=['POST'])
+def player_action():
+    data = request.json
     print("Id of player : {}".format(str(id(player))))
-    if(action == 'play'):
+    if(data['action'] == 'play'):
         player.play()
-    elif(action == 'pause'):
+    elif(data['action'] == 'pause'):
         player.pause()
-    elif(action == 'stop'):
+    elif(data['action'] == 'stop'):
         player.stop()
-    return "Ok"
+    data = player.get_stats()
+    return jsonify(data=data)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5050)
