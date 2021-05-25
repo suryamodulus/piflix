@@ -9,6 +9,7 @@
         <meta name="MobileOptimized" content="320">
         <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/x-icon">
         <link href="{{ url_for('static', filename='css/tabler.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/tabler-vendors.min.css') }}" rel="stylesheet">
         <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
     </head>
 <body>
@@ -39,16 +40,80 @@
       </header>
       <main class="container py-4">
         <section class="watch-box">
-          <div class="card mx-auto">
+          <div class="card card-sm mx-auto">
             <div class="card-body text-center">
-              <h2>{{ filename }}</h2>
+              <p>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-movie" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#78EA4A" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                  <line x1="8" y1="4" x2="8" y2="20"></line>
+                  <line x1="16" y1="4" x2="16" y2="20"></line>
+                  <line x1="4" y1="8" x2="8" y2="8"></line>
+                  <line x1="4" y1="16" x2="8" y2="16"></line>
+                  <line x1="4" y1="12" x2="20" y2="12"></line>
+                  <line x1="16" y1="8" x2="20" y2="8"></line>
+                  <line x1="16" y1="16" x2="20" y2="16"></line>
+                </svg>
+                {{ filename }}
+              </p>
+              <div class="my-1">
+                  <button class="btn btn-outline-white btn-icon btn-lg" onclick="playerController('stop')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-stop" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="red" fill="red" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+                    </svg>
+                  </button>
+              </div>
             </div>
           </div>
           <div class="card mx-auto my-4 bg-dark">
             <div class="card-body text-center">
-              <div class="row justify-content-around">
+              <div>
+                <p class="my-2 text-white" id="sliderText" demo-slider="slider1"></p>
+                <div data-slider='{"js-name": "slider1","start": 50,"range": {"min": 0,"max": 100}}'></div>
+              </div>
+              <div class="row justify-content-around my-3">
                 <div class="col-3">
-                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('rewind10')">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('volume_down')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-volume-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M15 8a5 5 0 0 1 0 8"></path>
+                      <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a0.8 .8 0 0 1 1.5 .5v14a0.8 .8 0 0 1 -1.5 .5l-3.5 -4.5"></path>
+                    </svg>
+                  </button>
+                  <div>
+                    <span class="text-white">- Vol</span>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('mute')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-volume-3" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="red" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a0.8 .8 0 0 1 1.5 .5v14a0.8 .8 0 0 1 -1.5 .5l-3.5 -4.5"></path>
+                      <path d="M16 10l4 4m0 -4l-4 4"></path>
+                    </svg>
+                  </button>
+                  <div>
+                    <span class="text-white">Mute</span>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('volume_down')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-volume" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M15 8a5 5 0 0 1 0 8"></path>
+                      <path d="M17.7 5a9 9 0 0 1 0 14"></path>
+                      <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a0.8 .8 0 0 1 1.5 .5v14a0.8 .8 0 0 1 -1.5 .5l-3.5 -4.5"></path>
+                    </svg>
+                  </button>
+                  <div>
+                    <span class="text-white">Vol +</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-around my-3">
+                <div class="col-3">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('rewind_15s')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                       <polyline points="11 7 6 12 11 17"></polyline>
@@ -56,11 +121,11 @@
                     </svg>
                   </button>
                   <div>
-                    <span class="text-white">- 10s</span>
+                    <span class="text-white">- 15s</span>
                   </div>
                 </div>
                 <div class="col-3">
-                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('play_pause')">
+                  <button class="btn btn-primary btn-icon btn-lg" onclick="playerController('play_pause')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                       <path d="M7 4v16l13 -8z"></path>
@@ -71,7 +136,7 @@
                   </div>
                 </div>
                 <div class="col-3">
-                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('forward10')">
+                  <button class="btn btn-light btn-icon btn-lg" onclick="playerController('forward_15s')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                       <polyline points="7 7 12 12 7 17"></polyline>
@@ -79,7 +144,7 @@
                     </svg>
                   </button>
                   <div>
-                    <span class="text-white">+ 10s</span>
+                    <span class="text-white">+ 15s</span>
                   </div>
                 </div>
               </div>
@@ -87,8 +152,31 @@
           </div>
         </section>
       </main>
+      <script src="{{ url_for('static', filename='js/nouislider.min.js') }}"></script>
       <script src="{{ url_for('static', filename='js/tabler.min.js') }}"></script>
       <script>
+
+        let sliderTriggerList = [].slice.call(document.querySelectorAll("[data-slider]"));
+        sliderTriggerList.map(function (sliderTriggerEl) {
+          let options = {};
+          if (sliderTriggerEl.getAttribute("data-slider")) {
+            options = JSON.parse(sliderTriggerEl.getAttribute("data-slider"));
+          }
+          let slider = noUiSlider.create(sliderTriggerEl, options);
+          if (options['js-name']) {
+            window[options['js-name']] = slider;
+          }
+        });
+      
+        window.onload = slider;
+
+        function slider(){
+            let sliderText = document.getElementById('sliderText');
+            slider1.on('update',function(values,handle){
+                sliderText.innerHTML = `${values[handle]} / 100.00`;
+            });
+        }
+
         const play_text = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-player-play" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
           <path d="M7 4v16l13 -8z"></path>
