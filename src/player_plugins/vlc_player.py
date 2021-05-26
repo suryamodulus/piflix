@@ -5,15 +5,13 @@ import vlc
 class VlcPlayer:
     def __init__(self):
         self.player = vlc.MediaPlayer()
-        self.filepath = ''
+        self.filepath = None
     
     def set_media(self, filepath):
-        if(self.player.is_playing()):
-            if(self.filepath and self.filepath == filepath):
-                return
-        media = vlc.Media(filepath)
-        self.player.set_media(media)
-        self.filepath = filepath
+        if(self.filepath == None or self.filepath != filepath):
+            media = vlc.Media(filepath)
+            self.player.set_media(media)
+            self.filepath = filepath
     
     def get_stats(self):
         data = {}
@@ -22,6 +20,15 @@ class VlcPlayer:
         data['total_time'] = max(0, self.player.get_length())
         data['current_time'] = max(0, self.player.get_time())
         return data
+
+    def subscribe_to_vlc_events(self, callback_fn):
+        mp_em = self.player.event_manager()
+        mp_em.event_attach(vlc.EventType.MediaPlayerPaused, callback_fn)
+        mp_em.event_attach(vlc.EventType.MediaPlayerPlaying, callback_fn)
+        mp_em.event_attach(vlc.EventType.MediaPlayerMuted, callback_fn)
+        mp_em.event_attach(vlc.EventType.MediaPlayerUnmuted, callback_fn)
+        mp_em.event_attach(vlc.EventType.MediaPlayerLengthChanged, callback_fn)
+        mp_em.event_attach(vlc.EventType.MediaPlayerTimeChanged, callback_fn)
 
     def play(self):
             self.player.play()

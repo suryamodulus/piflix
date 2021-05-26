@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, json
+from flask_socketio import SocketIO, send, emit
 from os import makedirs, path
 import glob
 import base64
@@ -10,11 +11,24 @@ from xplayer import init_player
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
+# Initialize Socket.io
+socketio = SocketIO(app)
+
 # Validate media folder path
 check_media_folder_path(app.config['MEDIA_FOLDER_PATH'])
 
 # Initalize player plugin
 player = init_player(app.config['PLAYER_PLUGIN'])
+
+
+def vlc_events_consumer(event):
+    data = player.get_stats()
+    data = json.dumps(data)
+    socketio.emit('player_stats',data, json=True)
+
+@socketio.on("connect")
+def connect():
+    player.subscribe_to_vlc_events(vlc_events_consumer)
 
 @app.route('/', methods=['GET'])
 def index():
@@ -61,7 +75,7 @@ def player_stats():
 @app.route('/player/controller', methods=['POST'])
 def player_action():
     data = request.json
-    print("Id of player : {}".format(str(id(player))))
+    # print("Id of player : {}".format(str(id(player))))
     if(data['action'] == 'play'):
         player.play()
     elif(data['action'] == 'pause'):
@@ -72,4 +86,4 @@ def player_action():
     return jsonify(data=data)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5050)
+    socketio.run(app, host='0.0.0.0', port=5050)

@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 flask = "*"
 python-vlc = "*"
+flask-socketio = "*"
 
 [requires]
 python_version = "3.9"

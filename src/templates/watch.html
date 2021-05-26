@@ -162,7 +162,9 @@
     <script src="{{ url_for('static', filename='js/nouislider.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tabler.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vue2.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/socket.io.min.js') }}"></script>
     <script>
+      let socket = io({reconnection: false});
       let store = {
         debug: true,
         state: {
@@ -175,24 +177,28 @@
           if (this.debug) console.log('doControllerAction triggered with', action, value)
           if(action === 'play_pause'){
             if(this.state.is_playing){
-              this.state.is_playing = false
               action = 'pause'
             }
             else{
-              this.state.is_playing = true
               action = 'play'
             }
           }
-          response = await fetch(`/player/controller`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action, value })})
+          await fetch(`/player/controller`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action, value })})
+          // this.fetchPlayerStats()
         },
-        async getStats(){
+        async fetchPlayerStats(){
             let response = await fetch(`/player/stats`, { method: 'GET'})
             response = await response.json()
-            console.log(response)
-            this.state.is_playing =  response.data.is_playing
-            this.state.is_mute  = response.data.is_mute
-            this.state.current_time = response.data.current_time
-            this.state.total_time = response.data.total_time
+            this.updatePlayerStats(response.data)
+        },
+        async updatePlayerStats(data){
+            if(typeof data === 'string'){
+              data = JSON.parse(data)
+            }
+            this.state.is_playing =  data.is_playing
+            this.state.is_mute  = data.is_mute
+            this.state.current_time = data.current_time
+            this.state.total_time = data.total_time
         },
         slider(){
           let sliderText = document.getElementById('sliderText');
@@ -209,12 +215,30 @@
           doControllerAction(action, value =''){
             store.doControllerAction(action, value)
           },
-          getStats(){
-            setInterval(store.getStats.bind(store), 1000)
+          updatePlayerStats(data){
+            store.updatePlayerStats(data)
+          },
+          fetchPlayerStats(){
+            store.fetchPlayerStats()
           }
+          // fetchPlayerStatsPolling(){
+            // setInterval(store.fetchPlayerStats.bind(store), 1000)
+          //},
+        },
+        beforeMount(){
+          this.fetchPlayerStats()
         },
         mounted(){
-          this.getStats()
+          socket.on('connect', function() {
+            console.log('connected');
+          }),
+          socket.on('disconnect', function() {
+            console.log('disconnected');
+          }),
+          socket.on("player_stats", data => {
+            this.updatePlayerStats(data)
+          });
+          //this.fetchPlayerStatsPolling()
         }
       })
 
