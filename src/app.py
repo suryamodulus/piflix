@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, json
+from flask import Flask, request, render_template, jsonify, json, g
 from flask_socketio import SocketIO, send, emit
 from os import makedirs, path
 import glob
@@ -13,6 +13,7 @@ app.config.from_pyfile('config.py')
 
 # Initialize Socket.io
 socketio = SocketIO(app)
+socketio_clients = 0
 
 # Validate media folder path
 check_media_folder_path(app.config['MEDIA_FOLDER_PATH'])
@@ -22,13 +23,23 @@ player = init_player(app.config['PLAYER_PLUGIN'])
 
 
 def vlc_events_consumer(event):
-    data = player.get_stats()
-    data = json.dumps(data)
-    socketio.emit('player_stats',data, json=True)
+    global socketio_clients
+    if(socketio_clients > 0):
+        data = player.get_stats()
+        data = json.dumps(data)
+        socketio.emit('player_stats',data, json=True)
 
 @socketio.on("connect")
-def connect():
-    player.subscribe_to_vlc_events(vlc_events_consumer)
+def socket_connect():
+    global socketio_clients
+    if(socketio_clients < 1):
+        player.subscribe_to_vlc_events(vlc_events_consumer)
+    socketio_clients += 1
+
+@socketio.on("disconnect")
+def socket_disconnect():
+    global socketio_clients
+    socketio_clients -= 1
 
 @app.route('/', methods=['GET'])
 def index():
